@@ -1,0 +1,87 @@
+############################
+# Build directories (CMake)
+############################
+build/
+build-*/
+cmake-build-*/
+out/
+
+############################
+# CMake generated files
+############################
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+CTestTestfile.cmake
+compile_commands.json
+Testing/
+
+############################
+# Object files
+############################
+*.o
+*.obj
+
+############################
+# Libraries
+############################
+*.a
+*.lib
+*.so
+*.so.*
+*.dll
+*.dylib
+
+############################
+# Executables
+############################
+*.exe
+*.out
+*.app
+
+############################
+# Debug / Coverage / Profiling
+############################
+*.dSYM/
+*.pdb
+*.ilk
+*.gcda
+*.gcno
+*.gcov
+*.prof
+*.log
+*.stackdump
+
+############################
+# Package managers (optional)
+############################
+vcpkg_installed/
+.vcpkg-root
+conan.lock
+conanbuildinfo.*
+
+############################
+# IDE / Editors (ВСЁ НАХУЙ)
+############################
+.idea/
+.vscode/
+*.iml
+
+############################
+# OS trash
+############################
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+############################
+# Temporary files
+############################
+*.tmp
+*.swp
+*.swo

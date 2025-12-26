@@ -1,0 +1,260 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{alltt} % вместо verbatim, чтобы не падать в center
+
+% Отступы между частями и внутри частей
+\newcommand{\BigGap}{\vspace{1.2cm}}   % между разделами
+\newcommand{\SmallGap}{\vspace{0.3cm}} % между заголовком и телом
+
+\begin{document}
+
+\begin{center}
+
+{\huge\bfseries Грамматика языка Пфру}\\[6pt]
+
+\BigGap
+
+% ==============================
+% АЛФАВИТ
+% ==============================
+
+{\Large\bfseries Алфавит}
+
+\SmallGap
+
+\begin{alltt}
+<letter> := "A"..."Z" | "a"..."z" | "_"
+<ruletter> := "А"..."Я" | "а"..."я" | "_"
+<digit> := "0"..."9"
+<any> := ?любойсимвол?
+<identifier> := <letter>\{<letter> | <digit>\}
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ЛИТЕРАЛЫ
+% ==============================
+
+{\Large\bfseries Литералы}
+
+\SmallGap
+
+\begin{alltt}
+<integer_literal> := <digit>\{<digit>\}
+<float_literal> := <digit>\{<digit>\} "." <digit>\{<digit>\}
+<char_literal> := "'" [<letter>] "'"
+<string_literal> := """ \{<letter>\} """
+<bool_literal> := "true" | "false"
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ПРОБЕЛЫ И ПЕРЕНОСЫ
+% ==============================
+
+{\Large\bfseries Пробелы и переносы строк}
+
+\SmallGap
+
+\begin{alltt}
+<space> := " " | \textbackslash{t}
+<newline> := \textbackslash{n} | \textbackslash{r} | \textbackslash{r}\textbackslash{n}
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ТИПЫ
+% ==============================
+
+{\Large\bfseries Типы}
+
+\SmallGap
+
+\begin{alltt}
+<primitive_type> := "i8" | "i16" | "i32" | "i64" |
+                    "f32" | "f64" | "char" | "stringa" | "bool"
+<array_type> := <primitive_type> "[" <integer_literal> "]"
+<type> := <primitive_type> | <array_type>
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% БЛОКИ
+% ==============================
+
+{\Large\bfseries Блоки}
+
+\SmallGap
+
+\begin{alltt}
+<block> := "\{" \{<statement>\} "\}"
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ОПЕРАТОРЫ
+% ==============================
+
+{\Large\bfseries Операторы}
+
+\SmallGap
+
+\begin{alltt}
+<statement> :=
+    <var_decl> ";"
+  | <assignment> ";"
+  | <expr> ";"
+  | <if_stmt>
+  | <while_stmt>
+  | <do_while_stmt>
+  | <for_stmt>
+  | <return_stmt> ";"
+
+<var_decl> := <identifier> [":" <type>] ["=" <expr>]
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% УСЛОВНЫЕ И ЦИКЛЫ
+% ==============================
+
+{\Large\bfseries Ветвление и циклы}
+
+\SmallGap
+
+\begin{alltt}
+<if_stmt> := "if" <expr> <block>
+             \{"elif" <expr> <block>\}
+
+<while_stmt> := "while" <expr> <block>
+<do_while_stmt> := "do" <block> "while" <expr> ";"
+
+<for_stmt> := "for" <identifier> "in" <range> <block>
+
+<range> := "[" <expr> ";" [<expr>] ";" <expr> "]"
+
+<return_stmt> := "return" <expr>
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ВЫРАЖЕНИЯ
+% ==============================
+
+{\Large\bfseries Выражения}
+
+\SmallGap
+
+\begin{alltt}
+<expr> := <comma_expr>
+<assignment> := <identifier> "=" <comma_expr>
+<comma_expr> := <logic_or>\{"," <logic_or>\}
+<logic_or> := <logic_and>\{"||" <logic_and>\}
+<logic_and> := <bit_or>\{"&&" <bit_or>\}
+<bit_or> := <bit_xor>\{"|" <bit_xor>\}
+<bit_xor> := <bit_and>\{"^" <bit_and>\}
+<bit_and> := <equality>\{"&" <equality>\}
+<equality> := <rel>\{("==" | "!=") <rel>\}
+<rel> := <shift>\{("<" | ">" | "<=" | ">=") <shift>\}
+<shift> := <add>\{("<<" | ">>") <add>\}
+<add> := <mul>\{("+" | "-") <mul>\}
+<mul> := <unary>\{("*" | "/" | "%") <unary>\}
+<unary> := [("+" | "-" | "!")] <primary>
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ПЕРВИЧНЫЕ ВЫРАЖЕНИЯ
+% ==============================
+
+{\Large\bfseries Первичные выражения}
+
+\SmallGap
+
+\begin{alltt}
+<primary> :=
+    <literal>
+  | <identifier>
+  | <call_expr>
+  | <array_literal>
+  | "(" <expr> ")"
+
+<call_expr> := <identifier> "(" [<arg_list>] ")"
+<arg_list> := <expr>\{"," <expr>\}
+
+<array_literal> := "\{" <expr>\{"," <expr>\} "\}"
+
+<literal> := <integer_literal> | <float_literal> |
+             <string_literal> | <char_literal> | <bool_literal>
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ПРОГРАММА
+% ==============================
+
+{\Large\bfseries Программа}
+
+\SmallGap
+
+\begin{alltt}
+<program> := \{<toplevel_decl>\}
+<toplevel_decl> := <repr_func> | <arrow_block>
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% ФУНКЦИИ repr(...)
+% ==============================
+
+{\Large\bfseries Функции repr(...)}
+
+\SmallGap
+
+\begin{alltt}
+<repr_func> := "repr" <identifier> "(" [<param_list>] ")"
+               ["->" <return_type_list>] <block>
+
+<param_list> := <param>\{"," <param>\}
+<param> := <identifier> ":" <type>
+
+<return_type_list> := <type>\{"," <type>\}
+\end{alltt}
+
+\BigGap
+
+% ==============================
+% БЛОК СТРЕЛОК #strelki
+% ==============================
+
+{\Large\bfseries Блок стрелок \#strelki}
+
+\SmallGap
+
+\begin{alltt}
+<arrow_block> := "\#" [<identifier>] "\{" {<arrow_line>} "\}"
+<arrow_line> := <arrow_node> <arrow_op> <arrow_node> ";"
+<arrow_node> := "start" | "end" | <identifier>
+<arrow_op> := "->" | "-(" <literal_list> ")>"
+<literal_list> := <literal>{", " <literal>}
+\end{alltt}
+
+\BigGap
+
+\end{center}
+
+\end{document}

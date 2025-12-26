@@ -1,16 +1,36 @@
 #pragma once
 
 #include "Token.h"
-#include<vector>
+#include <string>
+#include <vector>
 
 class Lexer {
  public:
     Lexer(const std::string &program);
+    bool parseProgram();
+    const std::vector<Token> &tokens() const;
 
  private:
+    struct Utf8Char {
+        uint32_t codepoint{};
+        size_t length{};
+    };
+
+    bool decodeUtf8(size_t index, Utf8Char &out) const;
+    void reset();
+    void skipWhitespace();
+    bool matchLiteral(const std::string &literal, bool skipSpace = true);
+    bool matchKeyword(const std::string &keyword);
+    bool isKeyword(const std::string &word) const;
+    bool isIdentifierChar(size_t index, size_t &advance);
+    void emitToken(TOKEN_TYPE type, int startIndex, int startRow, int startCol,
+                   int endIndex = -1);
+
     bool peek(const std::string &symbols);
 
     char get();
+
+    bool next();
 
     bool letter();
     bool ruLetter();

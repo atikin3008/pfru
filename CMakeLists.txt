@@ -4,4 +4,4 @@ project(pfru CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(pfru src/main.cpp)
+add_executable(pfru src/main.cpp src/Lexer.cpp)
